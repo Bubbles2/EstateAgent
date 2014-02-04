@@ -1,0 +1,81 @@
+public class StatusActivity extends Activity implements OnClickListener   {
+	Button buttonUpdate;
+	EditText editStatus;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_status);
+		
+		buttonUpdate = (Button) findViewById(R.id.update_button);
+		editStatus = (EditText) findViewById(R.id.edit_status);
+		
+		buttonUpdate.setOnClickListener(this);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.menu, menu);
+	
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		Intent intent = new Intent(this, UpdaterService.class);  
+		switch (item.getItemId()) {
+		// The start service just gets posts from the twitter app.
+		case R.id.start_service:
+			startService(intent);
+			return true;
+		case R.id.stop_service:
+			stopService(intent);
+			return true;
+
+		default:
+			return false;
+		}
+	}
+
+	@Override
+	public void onClick(View arg0) {
+		String statusText = editStatus.getText().toString();
+		// Post in asynch task
+		new PostToTwitter().execute(statusText);
+		Log.d("Tag", "Button Clicked First YAMBA");
+		
+	}
+		 //===================================================================================
+		 // Create Background Process to update the status
+		 //===================================================================================
+			// the class that will create a background thread and get call log
+			private class PostToTwitter extends AsyncTask<String, Void, String> {
+
+			
+
+				@Override
+				protected String doInBackground(String... params) {
+					// TODO Auto-generated method stub
+					try {
+						Twitter twitter = new Twitter("Student", "password");
+						twitter.setAPIRootUrl("http://yamba.marakana.com/api");
+						twitter.setStatus(params[0]);
+					} catch (TwitterException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					return "Update Twitter with : "+params[0];
+				}
+			
+				@Override
+				protected void onPostExecute(String result) {
+					// TODO Auto-generated method stub
+					super.onPostExecute(result);
+					Toast.makeText(StatusActivity.this,result,Toast.LENGTH_LONG).show();
+				}
+			
+			}
+									
+
+}
