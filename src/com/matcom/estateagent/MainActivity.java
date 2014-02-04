@@ -38,6 +38,7 @@ import android.provider.ContactsContract;
 
 public class MainActivity extends Activity implements OnItemClickListener{
 
+	// Test Git
 
 	boolean advSearchSelected =false;
 	public Cursor c;
