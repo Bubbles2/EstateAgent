@@ -49,6 +49,8 @@ public class MainActivity extends Activity implements OnItemClickListener{
 	// again
 	
 	// Again More
+	
+	// Fix on Air Book
 
 	boolean advSearchSelected =false;
 	public Cursor c;
